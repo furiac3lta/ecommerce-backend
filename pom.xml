@@ -95,6 +95,13 @@
 					<source>17</source>
 					<target>17</target>
 				</configuration>
+				<annotationProcessorPaths>
+					<path>
+						<groupId>org.mapstruct</groupId>
+						<artifactId>mapstruct-processor</artifactId>
+						<version>${version.mapstruct}</version>
+					</path>
+				</annotationProcessorPaths>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -17,7 +17,7 @@ import java.util.Collections;
 public class PaymentController {
 
     @PostMapping("/create-preference")
-    public ResponseEntity<String> createPreference(@RequestParam BigDecimal amount, @RequestParam String description) {
+    public ResponseEntity<String> createPreference(@RequestParam("amount") BigDecimal amount, @RequestParam("description") String description) {
         try {
             // Crear el item de la preferencia
             PreferenceItemRequest item = PreferenceItemRequest.builder()

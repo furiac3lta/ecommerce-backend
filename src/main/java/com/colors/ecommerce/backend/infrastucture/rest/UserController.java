@@ -22,7 +22,7 @@ public class UserController {
 
     //http://localhost:8085/api/v1/users/4
     @GetMapping("/{id}")
-    public User findById(@PathVariable Integer id) {
+    public User findById(@PathVariable("id") Integer id) {
         return userService.findById(id);
     }
 }

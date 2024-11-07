@@ -28,11 +28,11 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Category> findById(@PathVariable Integer id) {
+    public ResponseEntity<Category> findById(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteById(@PathVariable Integer id) {
+    public ResponseEntity<HttpStatus> deleteById(@PathVariable("id") Integer id) {
         categoryService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

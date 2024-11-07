@@ -3,14 +3,17 @@ package com.colors.ecommerce.backend.infrastucture.adapter;
 import com.colors.ecommerce.backend.domain.model.Category;
 import com.colors.ecommerce.backend.domain.port.ICategoryRepository;
 import com.colors.ecommerce.backend.infrastucture.mapper.CategoryMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@AllArgsConstructor
 public class CategoryCrudRepositoryImpl implements ICategoryRepository {
     private final ICategoryCrudRepository iCategoryCrudRepository;
     private final CategoryMapper categoryMapper;
+
+    public CategoryCrudRepositoryImpl(ICategoryCrudRepository iCategoryCrudRepository, CategoryMapper categoryMapper) {
+        this.iCategoryCrudRepository = iCategoryCrudRepository;
+        this.categoryMapper = categoryMapper;
+    }
 
     @Override
     public Category save(Category category) {

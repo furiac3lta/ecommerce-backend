@@ -52,12 +52,12 @@ public class ProductController {
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable Integer id) {
+    public ResponseEntity<Product> findById(@PathVariable("id") Integer id) {
         log.info("Finding product by id {}", id);
         return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Product> deleteById(@PathVariable Integer id) {
+    public ResponseEntity<Product> deleteById(@PathVariable("id") Integer id) {
         log.info("Deleting product by id {}", id);
         productService.delete(id);
         return ResponseEntity.ok().build();

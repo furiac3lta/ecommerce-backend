@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 public class UploadFile {
     private final String FOLDER = "src/main/resources/static/images/";
     private final String IMG_DEFAULT ="default.jpg";
-    private final String URL = "http://localhost:8085/images/";
+    private final String URL = "https://ecommerce-back-0cc9b90e39e5.herokuapp.com/images/";
 
 
    public String upload(MultipartFile multipartFile) throws IOException {

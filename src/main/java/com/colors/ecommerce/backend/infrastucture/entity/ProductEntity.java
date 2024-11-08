@@ -21,6 +21,7 @@ public class ProductEntity {
     private String code;
     private String description;
     private String urlImage;
+     private String publicId;
     private BigDecimal price;
     @CreationTimestamp
     private LocalDateTime dateCreated;

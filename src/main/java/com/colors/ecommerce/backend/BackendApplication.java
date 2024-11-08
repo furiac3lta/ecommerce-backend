@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class BackendApplication {
 
 	public static void main(String[] args) {
-		MercadoPagoConfig.setAccessToken("");
 		SpringApplication.run(BackendApplication.class, args);
 
 	}

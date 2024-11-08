@@ -16,6 +16,7 @@ public class Product {
     private String code;
     private String description;
     private String urlImage;
+    private String publicId;
     private BigDecimal price;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;

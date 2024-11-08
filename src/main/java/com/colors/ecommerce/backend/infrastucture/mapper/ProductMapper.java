@@ -16,6 +16,7 @@ public interface ProductMapper {
                     @Mapping(source = "code", target = "code"),
                     @Mapping(source = "description", target = "description"),
                     @Mapping(source = "urlImage", target = "urlImage"),
+                    @Mapping(source = "publicId", target = "publicId"),
                     @Mapping(source = "price", target = "price"),
                     @Mapping(source = "dateCreated", target = "dateCreated"),
                     @Mapping(source = "dateUpdated", target = "dateUpdated"),

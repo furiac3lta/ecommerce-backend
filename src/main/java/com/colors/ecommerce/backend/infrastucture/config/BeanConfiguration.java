@@ -19,8 +19,8 @@ public class BeanConfiguration {
         return new CategoryService(iCategoryRepository);
     }
     @Bean
-    public ProductService productService(IProductRepository iProductRepository, UploadFile uploadFile) {
-        return new ProductService(iProductRepository, uploadFile);
+    public ProductService productService(IProductRepository iProductRepository,CloudinaryUploadFile cloudinaryUploadFile) {
+        return new ProductService(iProductRepository,cloudinaryUploadFile);
     }
     @Bean
     public OrderService orderService(IOrderRepository iOrderRepository) {

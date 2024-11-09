@@ -79,7 +79,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 @Controller
-@RequestMapping("api/v1/admin/products")
+@RequestMapping("/api/v1/admin/products")
 @Slf4j
 @AllArgsConstructor
 @CrossOrigin(origins = {"http://localhost:4200", "https://ecommerce-angular-five.vercel.app"})

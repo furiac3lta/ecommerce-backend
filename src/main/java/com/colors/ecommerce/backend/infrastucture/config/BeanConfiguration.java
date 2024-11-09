@@ -26,8 +26,14 @@ public class BeanConfiguration {
     public OrderService orderService(IOrderRepository iOrderRepository) {
         return new OrderService(iOrderRepository);
     }
+
     @Bean
     public UploadFile uploadFile(){
         return new UploadFile();
+    }
+
+    @Bean
+    public RegistrationService registrationService(IUserRepository iUserRepository){
+        return new RegistrationService(iUserRepository);
     }
 }

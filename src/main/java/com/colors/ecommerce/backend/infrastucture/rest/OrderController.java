@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/orders")
+@RequestMapping("/api/v1/orders")
 @Slf4j
 @CrossOrigin(origins = {"http://localhost:4200", "https://ecommerce-angular-five.vercel.app"})
 public class OrderController {

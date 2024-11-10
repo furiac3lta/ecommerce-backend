@@ -1,5 +1,7 @@
 package com.colors.ecommerce.backend.infrastucture.rest;
 
+import com.colors.ecommerce.backend.application.UserService;
+import com.colors.ecommerce.backend.domain.model.User;
 import com.colors.ecommerce.backend.infrastucture.dto.JWTClient;
 import com.colors.ecommerce.backend.infrastucture.dto.UserDTO;
 import com.colors.ecommerce.backend.infrastucture.jwt.JWTGenerator;
@@ -19,10 +21,12 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final JWTGenerator jwtGenerator;
+    private final UserService userService;
 
-    public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator) {
+    public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtGenerator = jwtGenerator;
+        this.userService = userService;
     }
     @PostMapping("/login")
 
@@ -32,8 +36,9 @@ public class LoginController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("Rol de user: {}",SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().get().toString());
+        User user = userService.findByEmail(userDTO.username());
         String token = jwtGenerator.getToken(userDTO.username());
-        JWTClient jwtClient = new JWTClient(token);
+        JWTClient jwtClient = new JWTClient(user.getId(),token);
         return new ResponseEntity<>(jwtClient, HttpStatus.OK);
     }
 }

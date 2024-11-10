@@ -38,7 +38,7 @@ public class LoginController {
         log.info("Rol de user: {}",SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().get().toString());
         User user = userService.findByEmail(userDTO.username());
         String token = jwtGenerator.getToken(userDTO.username());
-        JWTClient jwtClient = new JWTClient(user.getId(),token);
+        JWTClient jwtClient = new JWTClient(user.getId(),token, user.getUserType().toString());
         return new ResponseEntity<>(jwtClient, HttpStatus.OK);
     }
 }

@@ -53,10 +53,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("https://ecommerce-angular-five.vercel.app"); // Cambia esto por tu dominio en Vercel
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.addAllowedOrigin("https://ecommerce-angular-five.vercel.app"); // Permite el dominio específico de Vercel
+        config.addAllowedHeader("*"); // Permite todos los headers
+        config.addAllowedMethod("*"); // Permite todos los métodos (GET, POST, etc.)
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
 }

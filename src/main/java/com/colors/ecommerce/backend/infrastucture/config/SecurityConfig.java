@@ -38,7 +38,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/payments/success").permitAll()
                         .requestMatchers("/api/v1/payments/**").hasRole("USER")
                         .requestMatchers("/api/v1/home/**").permitAll()
-                        .requestMatchers("/api/v1/security/**").permitAll()
+                        .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
+                      //  .requestMatchers("/api/v1/security/**").permitAll()
                     //    .requestMatchers("/api/v1/security/register").permitAll()  // Permitir acceso sin autenticación a /register
                       //  .requestMatchers("/api/v1/security/login").permitAll()
                  //       .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()

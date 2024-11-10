@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/home")
@@ -25,5 +22,10 @@ public class HomeController {
     public ResponseEntity<Iterable<Product>> findAll() {
         log.info("Finding all products");
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> findById(@PathVariable("id") Integer id) {
+        log.info("Finding product by id {}", id);
+        return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
     }
 }

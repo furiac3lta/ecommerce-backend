@@ -121,9 +121,9 @@ public ResponseEntity<String> createPreference(@RequestParam("amount") BigDecima
 
         // Agregar URLs de redirección
         Map<String, String> backUrls = new HashMap<>();
-        backUrls.put("success", "https://mi-tienda.com/confirmacion-pago?status=success");
-        backUrls.put("failure", "https://mi-tienda.com/confirmacion-pago?status=failure");
-        backUrls.put("pending", "https://mi-tienda.com/confirmacion-pago?status=pending");
+        backUrls.put("success", "https://ecommerce-angular-five.vercel.app/confirmacion-pago?status=success");
+        backUrls.put("failure", "https://ecommerce-angular-five.vercel.app/confirmacion-pago?status=failure");
+        backUrls.put("pending", "https://ecommerce-angular-five.vercel.app/confirmacion-pago?status=pending");
         preferenceData.put("back_urls", backUrls);
 
         // Configurar RestTemplate

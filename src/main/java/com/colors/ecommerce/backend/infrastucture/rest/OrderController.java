@@ -20,6 +20,7 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
+
     @PostMapping
     public ResponseEntity<Order> save(@RequestBody Order order) {
         if(order.getOrderState().toString().equals(OrderState.CANCELLED.toString())) {

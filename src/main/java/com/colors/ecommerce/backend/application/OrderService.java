@@ -10,6 +10,7 @@ public class OrderService {
         this.IOrderRepository = iOrderRepository;
     }
     public Order save(Order order) {
+        System.out.println("Guardando orden: " + order);
         return this.IOrderRepository.save(order);
     }
     public Iterable<Order> findAll() {

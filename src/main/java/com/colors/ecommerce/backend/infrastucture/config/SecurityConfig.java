@@ -11,8 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
@@ -46,26 +44,15 @@ public class SecurityConfig {
                 csrf( csrf-> csrf.disable()).authorizeHttpRequests(
                         aut -> aut.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/users/**").hasRole("USER")
                                 .requestMatchers("/api/v1/orders").permitAll()
-                                //.requestMatchers("/api/v1/orders/**").hasRole("USER")
+                                .requestMatchers("/api/v1/orders/**").hasRole("USER")
                                 .requestMatchers("/api/v1/payments/success").permitAll()
                                 .requestMatchers("/api/v1/payments/**").hasRole("USER")
                                 .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers("/api/v1/home/**").permitAll()
                                 .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
-//        httpSecurity.csrf(csrf -> csrf.disable()).authorizeHttpRequests(
-//                aut -> aut.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/v1/orders/**").hasRole("USER")
-//                        .requestMatchers("/api/v1/payments/success").permitAll()
-//                        .requestMatchers("/api/v1/payments/**").hasRole("USER")
-//                        .requestMatchers("/api/v1/home/**").permitAll()
-//                        .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
-                      //  .requestMatchers("/api/v1/security/**").permitAll()
-                    //    .requestMatchers("/api/v1/security/register").permitAll()  // Permitir acceso sin autenticación a /register
-                      //  .requestMatchers("/api/v1/security/login").permitAll()
-                 //       .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
         ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
@@ -73,16 +60,5 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("https://ecommerce-angular-five.vercel.app"); // Permite el dominio específico de Vercel
-//        config.addAllowedHeader("*"); // Permite todos los headers
-//        config.addAllowedMethod("*"); // Permite todos los métodos (GET, POST, etc.)
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
 
 }

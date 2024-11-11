@@ -44,19 +44,7 @@ public class SecurityConfig {
                                 }
                         )).
                 csrf( csrf-> csrf.disable()).authorizeHttpRequests(
-                        aut -> aut
-//                                .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
-//                                .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-//                                .requestMatchers("/api/v1/users/**").hasRole("USER")
-//                                .requestMatchers("/api/v1/orders").permitAll()
-//                                .requestMatchers("/api/v1/orders/**").permitAll()
-//                                .requestMatchers("/api/v1/payments/success").permitAll()
-//                                .requestMatchers("/api/v1/payments/**").hasRole("USER")
-//                                .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
-//                                .requestMatchers("/images/**").permitAll()
-//                                .requestMatchers("/api/v1/home/**").permitAll()
-//                                .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
-                                .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
+                        aut -> aut.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/users/**").hasRole("USER")
                                 .requestMatchers("/api/v1/orders").permitAll()
@@ -66,8 +54,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers("/api/v1/home/**").permitAll()
-                                .requestMatchers("/api/v1/security/**").permitAll()
-                                .anyRequest().authenticated())
+                                .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
         ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

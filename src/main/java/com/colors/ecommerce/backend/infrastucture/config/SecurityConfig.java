@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
@@ -46,7 +48,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/users/**").hasRole("USER")
                                 .requestMatchers("/api/v1/orders").permitAll()
-                                .requestMatchers("/api/v1/orders/**").hasRole("USER")
+                                .requestMatchers("/api/v1/orders/**").permitAll()
                                 .requestMatchers("/api/v1/payments/success").permitAll()
                                 .requestMatchers("/api/v1/payments/**").hasRole("USER")
                                 .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
@@ -59,6 +61,18 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://ecommerce-angular-five.vercel.app"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);
+        return source;
     }
 
 }

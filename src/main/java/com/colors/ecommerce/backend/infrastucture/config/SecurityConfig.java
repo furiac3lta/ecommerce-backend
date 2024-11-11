@@ -49,7 +49,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/orders/**").hasRole("USER")
                                 .requestMatchers("/api/v1/payments/success").permitAll()
                                 .requestMatchers("/api/v1/payments/**").hasRole("USER")
-                                .requestMatchers("/api/payments/webhook").permitAll()
+                                .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers("/api/v1/home/**").permitAll()
                                 .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()

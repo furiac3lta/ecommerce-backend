@@ -34,34 +34,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors(
-                        cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(
+                        cors -> cors.configurationSource(
+                                request -> {
+                                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                                    corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+                                    corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+                                    corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+                                    return  corsConfiguration;
+                                }
+                        )).
+                csrf( csrf-> csrf.disable()).authorizeHttpRequests(
                         aut -> aut
                                 .requestMatchers("/api/v1/orders/**").permitAll()
                                 .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/users/**").authenticated()
+                                .requestMatchers("/api/v1/users/**").hasRole("USER")
                                 .requestMatchers("/api/v1/payments/success").permitAll()
-                                .requestMatchers("/api/v1/payments/**").authenticated()
+                                .requestMatchers("/api/v1/payments/**").hasRole("USER")
                                 .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers("/api/v1/home/**").permitAll()
                                 .requestMatchers("/api/v1/security/**").permitAll()
                                 .requestMatchers("/admin/product").hasRole("ADMIN")
                                 .anyRequest().authenticated()
-                )
-                .exceptionHandling(exception -> exception
-                .accessDeniedPage("/login"))
+                ).exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/login")))
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -74,4 +79,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/api/**", configuration);
         return source;
     }
+
 }

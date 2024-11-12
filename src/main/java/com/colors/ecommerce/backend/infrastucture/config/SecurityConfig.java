@@ -48,8 +48,11 @@ public class SecurityConfig {
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers("/api/v1/home/**").permitAll()
                                 .requestMatchers("/api/v1/security/**").permitAll()
+                                .requestMatchers("/admin/product").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
+                .exceptionHandling(exception -> exception
+                .accessDeniedPage("/login"))
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

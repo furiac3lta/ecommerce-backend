@@ -58,8 +58,8 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/product").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
-                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/login")))
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/user/login"))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/user/login")))
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

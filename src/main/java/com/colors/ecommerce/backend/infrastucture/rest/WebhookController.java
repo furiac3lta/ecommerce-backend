@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/payments/webhook")
-@CrossOrigin(origins = {"http://localhost:4200", "https://ecommerce-angular-6bsx42ny5-furiac3ltas-projects.vercel.app/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar"})
 public class WebhookController {
 
     private final OrderService orderService;

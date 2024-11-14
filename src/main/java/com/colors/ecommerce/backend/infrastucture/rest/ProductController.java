@@ -82,7 +82,7 @@ import java.math.BigDecimal;
 @RequestMapping("/api/v1/admin/products")
 @Slf4j
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200", "https://ecommerce-angular-five.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar"})
 public class ProductController {
 
     private final ProductService productService;

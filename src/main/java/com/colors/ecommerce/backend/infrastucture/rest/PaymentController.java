@@ -58,54 +58,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/payments")
-@CrossOrigin(origins = {"http://localhost:4200", "https://ecommerce-angular-five.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar"})
 public class PaymentController {
 
     @Value("${mercadopago.access_token}")
     private String accessToken;
 
-//    @PostMapping("/create-preference")
-//    public ResponseEntity<String> createPreference(@RequestParam("amount") BigDecimal amount, @RequestParam("description") String description) {
-//        try {
-//            // Crear el item de la preferencia
-//            Map<String, Object> item = new HashMap<>();
-//            item.put("title", description);
-//            item.put("quantity", 1);
-//            item.put("unit_price", amount);
-//
-//            // Crear la preferencia
-//            Map<String, Object> preferenceData = new HashMap<>();
-//            preferenceData.put("items", Collections.singletonList(item));
-//
-//            // Configurar RestTemplate
-//            RestTemplate restTemplate = new RestTemplate();
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.APPLICATION_JSON);
-//            headers.setBearerAuth(accessToken);
-//
-//            HttpEntity<Map<String, Object>> request = new HttpEntity<>(preferenceData, headers);
-//
-//            // Enviar la solicitud a Mercado Pago
-//            ResponseEntity<Map> response = restTemplate.postForEntity(
-//                    "https://api.mercadopago.com/checkout/preferences",
-//                    request,
-//                    Map.class
-//            );
-//
-//            if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED) {
-//                Map<String, Object> responseBody = response.getBody();
-//                String initPoint = (String) responseBody.get("init_point");
-//
-//                // Retornar la URL de redirección de Mercado Pago
-//                return ResponseEntity.ok(initPoint);
-//            } else {
-//                return ResponseEntity.status(response.getStatusCode()).body("Error al crear la preferencia de pago");
-//            }
-//
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500).body("Error al crear la preferencia de pago: " + e.getMessage());
-//        }
-//    }
 @PostMapping("/create-preference")
 public ResponseEntity<String> createPreference(@RequestParam("amount") BigDecimal amount, @RequestParam("description") String description) {
     try {
@@ -121,9 +79,9 @@ public ResponseEntity<String> createPreference(@RequestParam("amount") BigDecima
 
         // Agregar URLs de redirección
         Map<String, String> backUrls = new HashMap<>();
-        backUrls.put("success", "https://ecommerce-angular-6bsx42ny5-furiac3ltas-projects.vercel.app/confirmacion-pago?status=success");
-        backUrls.put("failure", "https://ecommerce-angular-6bsx42ny5-furiac3ltas-projects.vercel.app/confirmacion-pago?status=failure");
-        backUrls.put("pending", "https://ecommerce-angular-6bsx42ny5-furiac3ltas-projects.vercel.app/confirmacion-pago?status=pending");
+        backUrls.put("success", "https://www.lcosmeticadigital.com.ar/confirmacion-pago?status=success");
+        backUrls.put("failure", "https://www.lcosmeticadigital.com.ar/confirmacion-pago?status=failure");
+        backUrls.put("pending", "https://www.lcosmeticadigital.com.ar/confirmacion-pago?status=pending");
         preferenceData.put("back_urls", backUrls);
 
         // Configurar RestTemplate

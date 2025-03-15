@@ -47,11 +47,11 @@ public class SecurityConfig {
                         aut -> aut
                                 .requestMatchers("/api/v1/orders/**").permitAll()
                                 .requestMatchers("/api/v1/admin/categories").permitAll()
-                               // .requestMatchers("/api/v1/users/**").permitAll()
+                                .requestMatchers("/api/v1/users/**").permitAll()
                                 .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
                              //   .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/api/v1/users/**").authenticated()
+                             //   .requestMatchers("/api/v1/users/**").authenticated()
 
                             //    .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/payments/success").permitAll()

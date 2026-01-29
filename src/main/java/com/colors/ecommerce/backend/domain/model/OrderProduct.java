@@ -9,7 +9,7 @@ public class OrderProduct {
     private Integer id;
     private BigDecimal quantity;
     private BigDecimal price;
-    private Integer productId;
+    private Integer productVariantId;
 
     public BigDecimal getTotalItem() {
         return this.price.multiply(this.quantity);

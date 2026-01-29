@@ -33,23 +33,25 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors(
-                        cors -> cors.configurationSource(
-                                request -> {
-                                    CorsConfiguration corsConfiguration = new CorsConfiguration();
-                                    corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-                                    corsConfiguration.setAllowedMethods(Arrays.asList("*"));
-                                    corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-                                    return  corsConfiguration;
-                                }
-                        )).
-                csrf( csrf-> csrf.disable()).authorizeHttpRequests(
+        httpSecurity
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(
                         aut -> aut
                                 .requestMatchers("/api/v1/orders/**").permitAll()
                                 .requestMatchers("/api/v1/admin/categories").permitAll()
                                 .requestMatchers("/api/v1/users/**").permitAll()
+                                .requestMatchers("/api/v1/variants/**").permitAll()
+                                .requestMatchers("/api/v1/size-guides/**").permitAll()
                                 .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/variants/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/size-guides/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/stock/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/import/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/reports/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/shipments/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/shipments/**").hasAnyRole("USER", "ADMIN")
                              //   .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")
                              //   .requestMatchers("/api/v1/users/**").authenticated()
                             //    .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
@@ -62,8 +64,8 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/product").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/user/login"))
-                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/user/login")))
+                        .authenticationEntryPoint((request, response, authException) -> response.sendError(401, "Unauthorized"))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(403, "Forbidden")))
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

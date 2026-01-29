@@ -48,12 +48,11 @@ public class OrderCrudRepositoryImpl implements IOrderRepository {
     }
 
     @Override
-    public void updateStateById(Integer id, String state) {
-        if(state.equals(OrderState.CANCELLED)){
-            iOrderCrudRepository.updateStateById(id, OrderState.CANCELLED);
-
-        }else{
-            iOrderCrudRepository.updateStateById(id, OrderState.CONFIRMED);
-        }
+    public Order updateStateById(Integer id, OrderState state) {
+        OrderEntity orderEntity = iOrderCrudRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Order with id: " + id + " not found")
+        );
+        orderEntity.setOrderState(state);
+        return iOrderMapper.toOrder(iOrderCrudRepository.save(orderEntity));
     }
 }

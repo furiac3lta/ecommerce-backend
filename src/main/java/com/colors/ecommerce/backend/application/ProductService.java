@@ -135,6 +135,16 @@ public class ProductService {
     }
 
     public Product save(Product product, MultipartFile multipartFile) throws IOException {
+        if (product.getBrand() == null || product.getBrand().isBlank()) {
+            product.setBrand("LION'S BRAND");
+        }
+        if (product.getActive() == null) {
+            product.setActive(true);
+        }
+        if (product.getSlug() == null || product.getSlug().isBlank()) {
+            product.setSlug(toSlug(product.getName()));
+        }
+
         if (multipartFile != null && !multipartFile.isEmpty()) {
             String uploadResult = cloudinaryUploadFile.upload(multipartFile);
             if (uploadResult != null) {
@@ -170,5 +180,14 @@ public class ProductService {
 
     private String getPublicIdFromUrl(String url) {
         return url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'));
+    }
+
+    private String toSlug(String value) {
+        if (value == null) {
+            return null;
+        }
+        return value.toLowerCase()
+                .replaceAll("[^a-z0-9]+", "-")
+                .replaceAll("(^-|-$)", "");
     }
 }

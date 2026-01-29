@@ -1,6 +1,7 @@
 package com.colors.ecommerce.backend.domain.port;
 
 import com.colors.ecommerce.backend.domain.model.Order;
+import com.colors.ecommerce.backend.domain.model.OrderState;
 
 
 public interface IOrderRepository {
@@ -8,5 +9,5 @@ public interface IOrderRepository {
     Order findById(Integer id);
     Iterable<Order> findAll();
     Iterable<Order> findByUserId(Integer userId);
-    void updateStateById(Integer id, String state);
+    Order updateStateById(Integer id, OrderState state);
 }

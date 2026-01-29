@@ -13,6 +13,9 @@ public class Order {
     private LocalDateTime dateCreated;
     private List<OrderProduct> orderProducts;
     private OrderState orderState;
+    private PaymentMethod paymentMethod;
+    private BigDecimal total;
+    private LocalDateTime paidAt;
     private Integer userId;
 
     public Order() {

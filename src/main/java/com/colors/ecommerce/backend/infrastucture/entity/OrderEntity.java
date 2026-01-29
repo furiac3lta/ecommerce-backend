@@ -1,10 +1,12 @@
 package com.colors.ecommerce.backend.infrastucture.entity;
 
 import com.colors.ecommerce.backend.domain.model.OrderState;
+import com.colors.ecommerce.backend.domain.model.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +21,10 @@ public class OrderEntity {
     private LocalDateTime dateCreated;
     @Enumerated(value= EnumType.STRING)
     private OrderState orderState;
+    @Enumerated(value = EnumType.STRING)
+    private PaymentMethod paymentMethod;
+    private BigDecimal total;
+    private LocalDateTime paidAt;
     @ManyToOne
     private UserEntity userEntity;
     @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.PERSIST)

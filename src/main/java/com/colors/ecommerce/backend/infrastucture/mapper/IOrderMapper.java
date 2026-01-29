@@ -16,6 +16,9 @@ public interface IOrderMapper {
                     @Mapping(source = "dateCreated", target = "dateCreated"),
                     @Mapping(source = "orderProducts", target = "orderProducts"),
                     @Mapping(source = "orderState", target = "orderState"),
+                    @Mapping(source = "paymentMethod", target = "paymentMethod"),
+                    @Mapping(source = "total", target = "total"),
+                    @Mapping(source = "paidAt", target = "paidAt"),
                     @Mapping(source = "userEntity.id", target = "userId")
             }
     )

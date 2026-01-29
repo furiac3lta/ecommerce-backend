@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface IOrderCrudRepository extends CrudRepository<OrderEntity, Integer> {
     @Transactional
     @Modifying
@@ -16,4 +19,7 @@ public interface IOrderCrudRepository extends CrudRepository<OrderEntity, Intege
     void updateStateById(Integer id, OrderState state);
 
     Iterable<OrderEntity> findByUserEntity(UserEntity userEntity);
+
+    List<OrderEntity> findByOrderStateAndDateCreatedBetween(OrderState orderState, LocalDateTime from, LocalDateTime to);
+    List<OrderEntity> findByDateCreatedBetween(LocalDateTime from, LocalDateTime to);
 }

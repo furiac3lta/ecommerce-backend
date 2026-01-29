@@ -3,6 +3,7 @@ package com.colors.ecommerce.backend.infrastucture.rest;
 import com.colors.ecommerce.backend.application.OrderService;
 import com.colors.ecommerce.backend.domain.model.Order;
 import com.colors.ecommerce.backend.domain.model.OrderState;
+import com.colors.ecommerce.backend.domain.model.PaymentMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +24,19 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Order> save(@RequestBody Order order) {
-        if(order.getOrderState().toString().equals(OrderState.CANCELLED.toString())) {
-            order.setOrderState(OrderState.CANCELLED);
-        }else{
-            order.setOrderState(OrderState.CONFIRMED);
+        order.setOrderState(OrderState.PENDING);
+        if (order.getPaymentMethod() == null) {
+            order.setPaymentMethod(PaymentMethod.TRANSFERENCIA);
         }
         return ResponseEntity.ok(orderService.save(order));
 
     }
     @PostMapping("/update/state/order")
-    public ResponseEntity updateStateById(@RequestParam Integer id, @RequestParam String state) {
-        orderService.updateStateById(id, state);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Order> updateStateById(@RequestParam Integer id,
+                                                 @RequestParam OrderState state,
+                                                 @RequestParam(required = false) String createdBy) {
+        String author = createdBy == null || createdBy.isBlank() ? "admin" : createdBy;
+        return ResponseEntity.ok(orderService.updateStateById(id, state, author));
 
     }
     @GetMapping

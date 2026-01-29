@@ -1,6 +1,7 @@
 package com.colors.ecommerce.backend.infrastucture.rest;
 
 import com.colors.ecommerce.backend.application.OrderService;
+import com.colors.ecommerce.backend.domain.model.OrderState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +34,9 @@ public class WebhookController {
 
                 if (orderId != null) {
                     if ("approved".equals(status)) {
-                        // Si el pago fue aprobado, cambia el estado del pedido a CONFIRMED
-                        orderService.updateStateById(orderId, "CONFIRMED");
+                        orderService.updateStateById(orderId, OrderState.COMPLETED);
                     } else if ("rejected".equals(status)) {
-                        // Si el pago fue rechazado, cambia el estado del pedido a CANCELLED
-                        orderService.updateStateById(orderId, "CANCELLED");
+                        orderService.updateStateById(orderId, OrderState.CANCELLED);
                     }
                 }
             }

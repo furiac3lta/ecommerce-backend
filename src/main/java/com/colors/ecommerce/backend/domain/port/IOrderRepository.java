@@ -10,4 +10,5 @@ public interface IOrderRepository {
     Iterable<Order> findAll();
     Iterable<Order> findByUserId(Integer userId);
     Order updateStateById(Integer id, OrderState state);
+    long countBySaleChannel(com.colors.ecommerce.backend.domain.model.SaleChannel saleChannel);
 }

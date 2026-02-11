@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface IProductCrudRepository  extends CrudRepository<ProductEntity, Integer> {
     Optional<ProductEntity> findByNameIgnoreCaseAndBrand(String name, String brand);
     Optional<ProductEntity> findByNameIgnoreCase(String name);
+    Iterable<ProductEntity> findByCategoryEntityId(Integer categoryId);
 }

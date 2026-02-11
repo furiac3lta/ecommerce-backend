@@ -19,9 +19,16 @@ public interface ProductVariantMapper {
                     @Mapping(source = "material", target = "material"),
                     @Mapping(source = "usage", target = "usage"),
                     @Mapping(source = "sku", target = "sku"),
+                    @Mapping(source = "priceRetail", target = "priceRetail"),
+                    @Mapping(source = "priceWholesale", target = "priceWholesale"),
+                    @Mapping(source = "deliveryType", target = "deliveryType"),
+                    @Mapping(source = "estimatedDeliveryDays", target = "estimatedDeliveryDays"),
+                    @Mapping(source = "estimatedDeliveryDate", target = "estimatedDeliveryDate"),
+                    @Mapping(source = "deliveryNote", target = "deliveryNote"),
                     @Mapping(source = "stockCurrent", target = "stockCurrent"),
                     @Mapping(source = "stockMinimum", target = "stockMinimum"),
                     @Mapping(source = "active", target = "active"),
+                    @Mapping(source = "sellOnline", target = "sellOnline"),
                     @Mapping(source = "productEntity.name", target = "productName")
             }
     )

@@ -30,6 +30,13 @@ public class ProductEntity {
     @Column(name = "image_url")
     private List<String> images;
     private BigDecimal price;
+    private Boolean priceOverride;
+    private Boolean sellOnline;
+    @Enumerated(EnumType.STRING)
+    private com.colors.ecommerce.backend.domain.model.DeliveryType deliveryType;
+    private Integer estimatedDeliveryDays;
+    private java.time.LocalDate estimatedDeliveryDate;
+    private String deliveryNote;
     private Boolean active;
     @CreationTimestamp
     private LocalDateTime dateCreated;

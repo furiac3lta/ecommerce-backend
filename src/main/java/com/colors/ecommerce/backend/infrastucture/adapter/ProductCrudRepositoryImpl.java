@@ -30,6 +30,11 @@ public class ProductCrudRepositoryImpl implements IProductRepository {
     }
 
     @Override
+    public Iterable<Product> findByCategoryId(Integer categoryId) {
+        return productMapper.toProductList(iProductCrudRepository.findByCategoryEntityId(categoryId));
+    }
+
+    @Override
     public void deleteById(Integer id) {
         iProductCrudRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Product with id " + id + " not found")

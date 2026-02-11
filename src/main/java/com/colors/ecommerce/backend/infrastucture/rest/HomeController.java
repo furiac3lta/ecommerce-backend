@@ -21,11 +21,15 @@ public class HomeController {
     @GetMapping
     public ResponseEntity<Iterable<Product>> findAll() {
         log.info("Finding all products");
-        return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(productService.findAllOnline(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Product> findById(@PathVariable("id") Integer id) {
         log.info("Finding product by id {}", id);
-        return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
+        Product product = productService.findById(id);
+        if (product.getSellOnline() != null && !product.getSellOnline()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }

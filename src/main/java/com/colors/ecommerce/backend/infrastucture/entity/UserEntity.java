@@ -27,6 +27,9 @@ public class UserEntity {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserType userType;
+    private Boolean isWholesale;
+    private java.math.BigDecimal wholesaleDiscount;
+    private String wholesalePriceList;
     @CreationTimestamp
     private LocalDateTime dateCreated;
     @UpdateTimestamp

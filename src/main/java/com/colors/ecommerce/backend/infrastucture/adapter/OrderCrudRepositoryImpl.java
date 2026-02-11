@@ -22,6 +22,13 @@ public class OrderCrudRepositoryImpl implements IOrderRepository {
     @Override
     public Order save(Order order) {
         OrderEntity orderEntity = iOrderMapper.toOrderEntity(order);
+        if (order.getUserId() != null) {
+            com.colors.ecommerce.backend.infrastucture.entity.UserEntity userEntity = new com.colors.ecommerce.backend.infrastucture.entity.UserEntity();
+            userEntity.setId(order.getUserId());
+            orderEntity.setUserEntity(userEntity);
+        } else {
+            orderEntity.setUserEntity(null);
+        }
         orderEntity.getOrderProducts().forEach(
                 orderProductEntity -> orderProductEntity.setOrderEntity(orderEntity)
         );
@@ -54,5 +61,10 @@ public class OrderCrudRepositoryImpl implements IOrderRepository {
         );
         orderEntity.setOrderState(state);
         return iOrderMapper.toOrder(iOrderCrudRepository.save(orderEntity));
+    }
+
+    @Override
+    public long countBySaleChannel(com.colors.ecommerce.backend.domain.model.SaleChannel saleChannel) {
+        return iOrderCrudRepository.countBySaleChannel(saleChannel);
     }
 }

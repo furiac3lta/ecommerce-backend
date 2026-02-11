@@ -4,6 +4,9 @@ import com.colors.ecommerce.backend.application.ReportService;
 import com.colors.ecommerce.backend.domain.model.OrderState;
 import com.colors.ecommerce.backend.domain.model.StockMovementReason;
 import com.colors.ecommerce.backend.domain.model.StockMovementType;
+import com.colors.ecommerce.backend.domain.model.SaleChannel;
+import com.colors.ecommerce.backend.domain.model.DeliveryType;
+import com.colors.ecommerce.backend.domain.model.ShipmentStatus;
 import com.colors.ecommerce.backend.domain.model.ShipmentStatus;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,10 +31,11 @@ public class ReportController {
     public ResponseEntity<ByteArrayResource> salesReport(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
-            @RequestParam(required = false) OrderState state
+            @RequestParam(required = false) OrderState state,
+            @RequestParam(required = false) SaleChannel saleChannel
     ) {
         OrderState orderState = state == null ? OrderState.COMPLETED : state;
-        byte[] bytes = reportService.salesReport(from, to, orderState);
+        byte[] bytes = reportService.salesReport(from, to, orderState, saleChannel);
         return pdfResponse(bytes, "sales-report.pdf");
     }
 
@@ -59,6 +63,18 @@ public class ReportController {
         return pdfResponse(bytes, "kardex.pdf");
     }
 
+    @GetMapping("/deliveries.pdf")
+    public ResponseEntity<ByteArrayResource> deliveriesReport(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @RequestParam(required = false) DeliveryType deliveryType,
+            @RequestParam(required = false) ShipmentStatus shipmentStatus,
+            @RequestParam(required = false) SaleChannel saleChannel
+    ) {
+        byte[] bytes = reportService.deliveriesReport(from, to, deliveryType, shipmentStatus, saleChannel);
+        return pdfResponse(bytes, "deliveries-report.pdf");
+    }
+
     @GetMapping("/orders-shipments.pdf")
     public ResponseEntity<ByteArrayResource> ordersShipmentsReport(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
@@ -68,6 +84,34 @@ public class ReportController {
     ) {
         byte[] bytes = reportService.ordersShipmentsReport(from, to, status, carrier);
         return pdfResponse(bytes, "orders-shipments.pdf");
+    }
+
+    @GetMapping("/kanban.pdf")
+    public ResponseEntity<ByteArrayResource> kanbanReport() {
+        byte[] bytes = reportService.kanbanReport();
+        return pdfResponse(bytes, "kanban-entregas.pdf");
+    }
+
+    @GetMapping("/delivered-orders.pdf")
+    public ResponseEntity<ByteArrayResource> deliveredOrdersReport(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+            @RequestParam(required = false) SaleChannel saleChannel
+    ) {
+        byte[] bytes = reportService.deliveredOrdersReport(from, to, saleChannel);
+        return pdfResponse(bytes, "reporte-ordenes-entregadas.pdf");
+    }
+
+    @GetMapping("/manual-usuario.pdf")
+    public ResponseEntity<ByteArrayResource> manualUsuario() {
+        byte[] bytes = reportService.manualUsuarioReport();
+        return pdfResponse(bytes, "Manual_Usuario_LionsBrand.pdf");
+    }
+
+    @GetMapping("/manual-admin.pdf")
+    public ResponseEntity<ByteArrayResource> manualAdmin() {
+        byte[] bytes = reportService.manualAdminReport();
+        return pdfResponse(bytes, "Manual_Admin_LionsBrand.pdf");
     }
 
     private ResponseEntity<ByteArrayResource> pdfResponse(byte[] bytes, String filename) {

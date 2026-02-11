@@ -19,6 +19,9 @@ public class User {
     private String cellphone;
     private String password;
     private UserType userType;
+    private Boolean isWholesale;
+    private java.math.BigDecimal wholesaleDiscount;
+    private String wholesalePriceList;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
 }

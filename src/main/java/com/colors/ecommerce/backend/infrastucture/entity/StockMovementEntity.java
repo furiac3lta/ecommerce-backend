@@ -2,6 +2,7 @@ package com.colors.ecommerce.backend.infrastucture.entity;
 
 import com.colors.ecommerce.backend.domain.model.StockMovementReason;
 import com.colors.ecommerce.backend.domain.model.StockMovementType;
+import com.colors.ecommerce.backend.domain.model.SaleChannel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,11 @@ public class StockMovementEntity {
 
     @ManyToOne
     private OrderEntity orderEntity;
+
+    @Enumerated(EnumType.STRING)
+    private SaleChannel saleChannel;
+
+    private java.math.BigDecimal unitPrice;
 
     private String note;
 

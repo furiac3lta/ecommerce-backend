@@ -5,6 +5,7 @@ import com.colors.ecommerce.backend.domain.port.ICategoryRepository;
 import com.colors.ecommerce.backend.domain.port.IOrderRepository;
 import com.colors.ecommerce.backend.domain.port.IProductRepository;
 import com.colors.ecommerce.backend.domain.port.IProductVariantRepository;
+import com.colors.ecommerce.backend.domain.port.IShipmentRepository;
 import com.colors.ecommerce.backend.domain.port.IStockMovementRepository;
 import com.colors.ecommerce.backend.domain.port.IStockReservationRepository;
 import com.colors.ecommerce.backend.domain.port.IUserRepository;
@@ -18,19 +19,22 @@ public class BeanConfiguration {
         return new UserService(iUserRepository);
     }
     @Bean
-    public CategoryService categoryService(ICategoryRepository  iCategoryRepository) {
-        return new CategoryService(iCategoryRepository);
+    public CategoryService categoryService(ICategoryRepository iCategoryRepository, IProductRepository iProductRepository) {
+        return new CategoryService(iCategoryRepository, iProductRepository);
     }
     @Bean
-    public ProductService productService(IProductRepository iProductRepository,CloudinaryUploadFile cloudinaryUploadFile) {
-        return new ProductService(iProductRepository,cloudinaryUploadFile);
+    public ProductService productService(IProductRepository iProductRepository, CloudinaryUploadFile cloudinaryUploadFile, CategoryService categoryService) {
+        return new ProductService(iProductRepository, cloudinaryUploadFile, categoryService);
     }
     @Bean
     public OrderService orderService(IOrderRepository iOrderRepository,
                                      IProductVariantRepository productVariantRepository,
+                                     IProductRepository productRepository,
+                                     CategoryService categoryService,
                                      IStockReservationRepository stockReservationRepository,
-                                     IStockMovementRepository stockMovementRepository) {
-        return new OrderService(iOrderRepository, productVariantRepository, stockReservationRepository, stockMovementRepository);
+                                     IStockMovementRepository stockMovementRepository,
+                                     IShipmentRepository shipmentRepository) {
+        return new OrderService(iOrderRepository, productVariantRepository, productRepository, categoryService, stockReservationRepository, stockMovementRepository, shipmentRepository);
     }
 
     @Bean

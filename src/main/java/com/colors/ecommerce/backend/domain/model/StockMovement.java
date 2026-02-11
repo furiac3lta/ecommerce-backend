@@ -12,6 +12,8 @@ public class StockMovement {
     private Integer qty;
     private StockMovementReason reason;
     private Integer orderId;
+    private SaleChannel saleChannel;
+    private java.math.BigDecimal unitPrice;
     private String note;
     private LocalDateTime createdAt;
     private String createdBy;

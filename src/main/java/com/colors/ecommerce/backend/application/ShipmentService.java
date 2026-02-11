@@ -50,7 +50,12 @@ public class ShipmentService {
             shipment.setStatus(shipment.getStatus() == null ? ShipmentStatus.CREATED : shipment.getStatus());
             shipment.setCreatedAt(LocalDateTime.now());
         }
-        return shipmentRepository.save(shipment);
+        Shipment saved = shipmentRepository.save(shipment);
+        if (saved.getStatus() == ShipmentStatus.DELIVERED) {
+            order.setActualDeliveryDate(LocalDateTime.now().toLocalDate());
+            orderRepository.save(order);
+        }
+        return saved;
     }
 
     @Transactional
@@ -65,7 +70,15 @@ public class ShipmentService {
         shipment.setStatus(status);
         shipment.setUpdatedBy(updatedBy);
         shipment.setUpdatedAt(LocalDateTime.now());
-        return shipmentRepository.save(shipment);
+        Shipment saved = shipmentRepository.save(shipment);
+        if (status == ShipmentStatus.DELIVERED) {
+            Order order = orderRepository.findById(orderId);
+            if (order != null) {
+                order.setActualDeliveryDate(LocalDateTime.now().toLocalDate());
+                orderRepository.save(order);
+            }
+        }
+        return saved;
     }
 
     public Shipment findByOrderId(Integer orderId) {

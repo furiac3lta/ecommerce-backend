@@ -17,6 +17,10 @@ public class OrderProductEntity {
     private BigDecimal quantity;
     private BigDecimal price;
     private Integer productVariantId;
+    @Enumerated(EnumType.STRING)
+    private com.colors.ecommerce.backend.domain.model.DeliveryType deliveryType;
+    private java.time.LocalDate estimatedDeliveryDate;
+    private String deliveryNote;
     @ManyToOne
     private OrderEntity orderEntity;
 }

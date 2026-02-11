@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/variants/**").permitAll()
                                 .requestMatchers("/api/v1/size-guides/**").permitAll()
                                 .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/admin/orders/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/variants/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/admin/size-guides/**").hasRole("ADMIN")
@@ -62,6 +63,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/home/**").permitAll()
                                 .requestMatchers("/api/v1/security/**").permitAll()
                                 .requestMatchers("/admin/product").hasRole("ADMIN")
+                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> response.sendError(401, "Unauthorized"))

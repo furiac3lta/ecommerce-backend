@@ -32,6 +32,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
+            if (request.getRequestURI().startsWith("/api/v1/admin/orders/update/state/order")) {
+                String authHeader = request.getHeader("Authorization");
+                log.info("JWT filter admin update: method={}, uri={}, hasAuthHeader={}",
+                        request.getMethod(), request.getRequestURI(), authHeader != null);
+            }
             // Verificamos si el token existe en la solicitud
             if (tokenExists(request, response)) {
                 Claims claims = JWTValid(request);
@@ -46,20 +51,26 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 } else {
                     // Limpiamos el contexto si no hay autoridades
                     SecurityContextHolder.clearContext();
+                    if (request.getRequestURI().startsWith("/api/v1/admin/orders/update/state/order")) {
+                        log.warn("JWT claims sin authorities para {}", request.getRequestURI());
+                    }
                 }
             } else {
                 // Limpiamos el contexto si no hay token
                 SecurityContextHolder.clearContext();
+                if (request.getRequestURI().startsWith("/api/v1/admin/orders/update/state/order")) {
+                    log.warn("JWT sin token para {}", request.getRequestURI());
+                }
             }
 
             // Pasamos la solicitud al siguiente filtro en la cadena
             filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
-            // Establecemos el código de estado 403 si hay un problema con el token
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
+            // Token inválido/expirado: limpiar contexto y continuar sin autenticación
+            SecurityContextHolder.clearContext();
+            log.warn("JWT inválido/expirado para {} {}: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
+            filterChain.doFilter(request, response);
         }
     }
 }

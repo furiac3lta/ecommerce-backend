@@ -4,6 +4,9 @@ import com.colors.ecommerce.backend.application.OrderService;
 import com.colors.ecommerce.backend.domain.model.Order;
 import com.colors.ecommerce.backend.domain.model.OrderState;
 import com.colors.ecommerce.backend.domain.model.PaymentMethod;
+import com.colors.ecommerce.backend.domain.model.SaleChannel;
+import com.colors.ecommerce.backend.domain.model.StockMovement;
+import com.colors.ecommerce.backend.infrastucture.rest.dto.TimelineEventDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<Order> save(@RequestBody Order order) {
         order.setOrderState(OrderState.PENDING);
+        order.setSaleChannel(SaleChannel.ONLINE);
         if (order.getPaymentMethod() == null) {
             order.setPaymentMethod(PaymentMethod.TRANSFERENCIA);
         }
@@ -50,5 +54,15 @@ public class OrderController {
     @GetMapping("/by-user/{id}")
     public ResponseEntity<Iterable<Order>> findByUserId(@PathVariable("id") Integer userid) {
         return ResponseEntity.ok(orderService.findByUserId(userid));
+    }
+
+    @GetMapping("/{id}/movements")
+    public ResponseEntity<Iterable<StockMovement>> getMovements(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(orderService.getMovementsByOrder(id));
+    }
+
+    @GetMapping("/{id}/timeline")
+    public ResponseEntity<java.util.List<TimelineEventDto>> getTimeline(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(orderService.buildTimeline(id));
     }
 }

@@ -12,6 +12,7 @@ public interface CategoryMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "name", target = "name"),
+            @Mapping(source = "price", target = "price"),
             @Mapping(source = "dateCreated", target = "dateCreated"),
             @Mapping(source = "dateUpdated", target = "dateUpdated"),
     })

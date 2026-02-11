@@ -17,6 +17,8 @@ public interface StockMovementMapper {
                     @Mapping(source = "qty", target = "qty"),
                     @Mapping(source = "reason", target = "reason"),
                     @Mapping(source = "orderEntity.id", target = "orderId"),
+                    @Mapping(source = "saleChannel", target = "saleChannel"),
+                    @Mapping(source = "unitPrice", target = "unitPrice"),
                     @Mapping(source = "note", target = "note"),
                     @Mapping(source = "createdAt", target = "createdAt"),
                     @Mapping(source = "createdBy", target = "createdBy")

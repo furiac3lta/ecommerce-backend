@@ -17,6 +17,13 @@ public class Order {
     private BigDecimal total;
     private LocalDateTime paidAt;
     private Integer userId;
+    private SaleChannel saleChannel;
+    private String orderNumber;
+    private DeliveryType deliveryType;
+    private java.time.LocalDate estimatedDeliveryDate;
+    private java.time.LocalDate actualDeliveryDate;
+    private BigDecimal balanceDue;
+    private BigDecimal balanceCredit;
 
     public Order() {
         orderProducts = new ArrayList<>();

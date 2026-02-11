@@ -22,6 +22,12 @@ public class Product {
     private String publicId;
     private List<String> images;
     private BigDecimal price;
+    private Boolean priceOverride;
+    private Boolean sellOnline;
+    private DeliveryType deliveryType;
+    private Integer estimatedDeliveryDays;
+    private java.time.LocalDate estimatedDeliveryDate;
+    private String deliveryNote;
     private Boolean active;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;

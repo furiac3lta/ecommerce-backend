@@ -19,7 +19,14 @@ public interface IOrderMapper {
                     @Mapping(source = "paymentMethod", target = "paymentMethod"),
                     @Mapping(source = "total", target = "total"),
                     @Mapping(source = "paidAt", target = "paidAt"),
-                    @Mapping(source = "userEntity.id", target = "userId")
+                    @Mapping(source = "userEntity.id", target = "userId"),
+                    @Mapping(source = "saleChannel", target = "saleChannel"),
+                    @Mapping(source = "orderNumber", target = "orderNumber"),
+                    @Mapping(source = "deliveryType", target = "deliveryType"),
+                    @Mapping(source = "estimatedDeliveryDate", target = "estimatedDeliveryDate"),
+                    @Mapping(source = "actualDeliveryDate", target = "actualDeliveryDate"),
+                    @Mapping(source = "balanceDue", target = "balanceDue"),
+                    @Mapping(source = "balanceCredit", target = "balanceCredit")
             }
     )
     Order toOrder(OrderEntity orderEntity);

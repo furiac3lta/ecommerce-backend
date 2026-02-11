@@ -47,4 +47,14 @@ public class StockMovementCrudRepositoryImpl implements IStockMovementRepository
     public Iterable<StockMovement> findByFilters(Integer variantId, LocalDateTime from, LocalDateTime to, StockMovementType type, StockMovementReason reason) {
         return stockMovementMapper.toStockMovementList(stockMovementCrudRepository.findByFilters(variantId, from, to, type, reason));
     }
+
+    @Override
+    public Iterable<StockMovement> findByOrderId(Integer orderId) {
+        return stockMovementMapper.toStockMovementList(stockMovementCrudRepository.findByOrderId(orderId));
+    }
+
+    @Override
+    public Iterable<StockMovement> findByDateRange(LocalDateTime from, LocalDateTime to) {
+        return stockMovementMapper.toStockMovementList(stockMovementCrudRepository.findByDateRange(from, to));
+    }
 }

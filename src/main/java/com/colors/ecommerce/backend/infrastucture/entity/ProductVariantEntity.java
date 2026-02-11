@@ -25,7 +25,15 @@ public class ProductVariantEntity {
     private String usage;
     @Column(unique = true)
     private String sku;
+    private BigDecimal priceRetail;
+    private BigDecimal priceWholesale;
+    @Enumerated(EnumType.STRING)
+    private com.colors.ecommerce.backend.domain.model.DeliveryType deliveryType;
+    private Integer estimatedDeliveryDays;
+    private java.time.LocalDate estimatedDeliveryDate;
+    private String deliveryNote;
     private Integer stockCurrent;
     private Integer stockMinimum;
     private Boolean active;
+    private Boolean sellOnline;
 }

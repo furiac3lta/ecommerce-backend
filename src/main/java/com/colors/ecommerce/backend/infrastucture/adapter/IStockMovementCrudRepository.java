@@ -15,4 +15,10 @@ public interface IStockMovementCrudRepository extends CrudRepository<StockMoveme
 
     @Query("SELECT m FROM StockMovementEntity m WHERE (:variantId IS NULL OR m.variantEntity.id = :variantId) AND (:type IS NULL OR m.type = :type) AND (:reason IS NULL OR m.reason = :reason) AND m.createdAt BETWEEN :from AND :to ORDER BY m.createdAt DESC")
     List<StockMovementEntity> findByFilters(Integer variantId, LocalDateTime from, LocalDateTime to, StockMovementType type, StockMovementReason reason);
+
+    @Query("SELECT m FROM StockMovementEntity m WHERE m.orderEntity.id = :orderId ORDER BY m.createdAt DESC")
+    List<StockMovementEntity> findByOrderId(Integer orderId);
+
+    @Query("SELECT m FROM StockMovementEntity m WHERE m.createdAt BETWEEN :from AND :to ORDER BY m.createdAt DESC")
+    List<StockMovementEntity> findByDateRange(LocalDateTime from, LocalDateTime to);
 }

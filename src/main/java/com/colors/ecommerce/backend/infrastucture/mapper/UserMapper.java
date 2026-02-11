@@ -19,6 +19,9 @@ public interface UserMapper {
                     @Mapping(source = "cellphone", target = "cellphone"),
                     @Mapping(source = "password", target = "password"),
                     @Mapping(source = "userType", target = "userType"),
+                    @Mapping(source = "isWholesale", target = "isWholesale"),
+                    @Mapping(source = "wholesaleDiscount", target = "wholesaleDiscount"),
+                    @Mapping(source = "wholesalePriceList", target = "wholesalePriceList"),
                     @Mapping(source = "dateCreated", target = "dateCreated"),
                     @Mapping(source = "dateUpdated", target = "dateUpdated"),
             }

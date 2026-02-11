@@ -133,11 +133,12 @@ public class ExcelImportService {
             product.setBrand(brand);
         }
 
+        if (product.getPriceOverride() == null) {
+            product.setPriceOverride(false);
+        }
+
         if (description != null && !description.isBlank()) {
             product.setDescription(description);
-        }
-        if (basePrice != null) {
-            product.setPrice(basePrice);
         }
         if (imagesRaw != null && !imagesRaw.isBlank()) {
             List<String> images = parseImages(imagesRaw);
@@ -155,7 +156,16 @@ public class ExcelImportService {
                         newCategory.setName(categoryName);
                         return categoryCrudRepository.save(newCategory);
                     });
+            if (category.getPrice() == null && basePrice != null) {
+                category.setPrice(basePrice);
+                category = categoryCrudRepository.save(category);
+            }
             product.setCategoryEntity(category);
+            if (category.getPrice() != null) {
+                product.setPrice(category.getPrice());
+            }
+        } else if (basePrice != null) {
+            product.setPrice(basePrice);
         }
 
         return productCrudRepository.save(product);

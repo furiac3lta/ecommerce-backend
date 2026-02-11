@@ -10,4 +10,6 @@ public interface IStockMovementRepository {
     StockMovement save(StockMovement movement);
     Iterable<StockMovement> findByVariantIdAndDateRange(Integer variantId, LocalDateTime from, LocalDateTime to);
     Iterable<StockMovement> findByFilters(Integer variantId, LocalDateTime from, LocalDateTime to, StockMovementType type, StockMovementReason reason);
+    Iterable<StockMovement> findByOrderId(Integer orderId);
+    Iterable<StockMovement> findByDateRange(LocalDateTime from, LocalDateTime to);
 }

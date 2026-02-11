@@ -10,6 +10,9 @@ public class OrderProduct {
     private BigDecimal quantity;
     private BigDecimal price;
     private Integer productVariantId;
+    private DeliveryType deliveryType;
+    private java.time.LocalDate estimatedDeliveryDate;
+    private String deliveryNote;
 
     public BigDecimal getTotalItem() {
         return this.price.multiply(this.quantity);

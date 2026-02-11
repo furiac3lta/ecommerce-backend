@@ -14,9 +14,16 @@ public class ProductVariant {
     private String material;
     private String usage;
     private String sku;
+    private BigDecimal priceRetail;
+    private BigDecimal priceWholesale;
+    private DeliveryType deliveryType;
+    private Integer estimatedDeliveryDays;
+    private java.time.LocalDate estimatedDeliveryDate;
+    private String deliveryNote;
     private Integer stockCurrent;
     private Integer stockMinimum;
     private Boolean active;
+    private Boolean sellOnline;
     private Integer reservedStock;
     private Integer availableStock;
     private String productName;

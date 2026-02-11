@@ -28,6 +28,12 @@ public class ProductVariantService {
         if (productVariant.getStockMinimum() == null) {
             productVariant.setStockMinimum(0);
         }
+        if (productVariant.getSellOnline() == null) {
+            productVariant.setSellOnline(true);
+        }
+        if (productVariant.getDeliveryType() == null) {
+            productVariant.setDeliveryType(com.colors.ecommerce.backend.domain.model.DeliveryType.IMMEDIATE);
+        }
         return productVariantRepository.save(productVariant);
     }
 

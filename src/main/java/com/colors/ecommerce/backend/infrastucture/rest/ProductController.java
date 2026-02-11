@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/admin/products")
 @Slf4j
 @AllArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar", "https://ecommerce-angular-production.up.railway.app"})
 public class ProductController {
 
     private final ProductService productService;

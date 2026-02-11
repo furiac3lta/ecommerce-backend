@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
 
 @RestController
 @RequestMapping("/api/v1/admin/import")
-@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar", "https://ecommerce-angular-production.up.railway.app"})
 public class ExcelImportController {
     private final ExcelImportService excelImportService;
 

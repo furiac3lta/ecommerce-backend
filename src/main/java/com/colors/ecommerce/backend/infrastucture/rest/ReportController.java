@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/admin/reports")
-@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar", "https://ecommerce-angular-production.up.railway.app"})
 public class ReportController {
     private final ReportService reportService;
 

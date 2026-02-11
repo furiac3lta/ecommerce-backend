@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://www.lcosmeticadigital.com.ar", "https://ecommerce-angular-production.up.railway.app"})
 @RequestMapping("/api/v1/admin/stock")
 public class StockAdminController {
     private final StockAdminService stockAdminService;

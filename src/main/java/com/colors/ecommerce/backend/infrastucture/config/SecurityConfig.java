@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/size-guides/**").permitAll()
                         .requestMatchers("/api/v1/security/**").permitAll()
                         .requestMatchers("/api/v1/home/**").permitAll()
+                        .requestMatchers("/api/v1/categories/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/error").permitAll()
 

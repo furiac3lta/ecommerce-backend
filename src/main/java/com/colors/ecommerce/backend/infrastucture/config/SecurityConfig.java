@@ -33,59 +33,97 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(
-                        aut -> aut
-                                .requestMatchers("/api/v1/orders/**").permitAll()
-                                .requestMatchers("/api/v1/admin/categories").permitAll()
-                                .requestMatchers("/api/v1/users/**").permitAll()
-                                .requestMatchers("/api/v1/variants/**").permitAll()
-                                .requestMatchers("/api/v1/size-guides/**").permitAll()
-                                .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/orders/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/variants/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/size-guides/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/stock/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/import/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/reports/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/admin/shipments/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/shipments/**").hasAnyRole("USER", "ADMIN")
-                             //   .requestMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")
-                             //   .requestMatchers("/api/v1/users/**").authenticated()
-                            //    .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/payments/success").permitAll()
-                                .requestMatchers("/api/v1/payments/**").hasRole("USER")
-                                .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
-                                .requestMatchers("/images/**").permitAll()
-                                .requestMatchers("/api/v1/home/**").permitAll()
-                                .requestMatchers("/api/v1/security/**").permitAll()
-                                .requestMatchers("/admin/product").hasRole("ADMIN")
-                                .requestMatchers("/error").permitAll()
-                                .anyRequest().authenticated()
-                ).exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> response.sendError(401, "Unauthorized"))
-                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(403, "Forbidden")))
+
+                .authorizeHttpRequests(aut -> aut
+
+                        // PUBLICOS
+                        .requestMatchers("/api/v1/orders/**").permitAll()
+                        .requestMatchers("/api/v1/users/**").permitAll()
+                        .requestMatchers("/api/v1/variants/**").permitAll()
+                        .requestMatchers("/api/v1/size-guides/**").permitAll()
+                        .requestMatchers("/api/v1/security/**").permitAll()
+                        .requestMatchers("/api/v1/home/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+
+                        // ADMIN
+                        .requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/orders/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/variants/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/size-guides/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/stock/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/import/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/reports/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/shipments/**").hasRole("ADMIN")
+
+                        // USER
+                        .requestMatchers("/api/v1/shipments/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/v1/payments/**").hasRole("USER")
+
+                        // WEBHOOK / EXTERNOS
+                        .requestMatchers("/api/payments/webhook", "/confirmacion-pago").permitAll()
+
+                        .anyRequest().authenticated()
+                )
+
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(401, "Unauthorized"))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendError(403, "Forbidden"))
+                )
+
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return httpSecurity.build();
     }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /**
+     * CONFIGURACION CORS PARA FRONTEND
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://www.lionsbrand.com.ar", "https://ecommerce-angular-production.up.railway.app"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",
+                "https://lionsbrand.com.ar",
+                "https://www.lionsbrand.com.ar",
+                "https://ecommerce-angular-production.up.railway.app"
+        ));
+
+        configuration.setAllowedMethods(Arrays.asList(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "OPTIONS"
+        ));
+
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+
+        configuration.setExposedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type"
+        ));
+
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
         source.registerCorsConfiguration("/api/**", configuration);
+
         return source;
     }
-
 }

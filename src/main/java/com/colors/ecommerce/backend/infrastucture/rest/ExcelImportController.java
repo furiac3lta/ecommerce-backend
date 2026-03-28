@@ -35,7 +35,7 @@ public class ExcelImportController {
         Sheet sheet = workbook.createSheet("variants");
         Row header = sheet.createRow(0);
         String[] columns = new String[]{
-                "productName", "category", "description", "basePrice", "images",
+                "productName", "code", "category", "description", "basePrice", "images",
                 "sku", "size", "color", "gsm", "material", "use", "stock", "active"
         };
         for (int i = 0; i < columns.length; i++) {
@@ -43,18 +43,19 @@ public class ExcelImportController {
         }
         Row sample = sheet.createRow(1);
         sample.createCell(0).setCellValue("Kimono Classic");
-        sample.createCell(1).setCellValue("kimono");
-        sample.createCell(2).setCellValue("Pearl weave 450 GSM");
-        sample.createCell(3).setCellValue(120000);
-        sample.createCell(4).setCellValue("https://...");
-        sample.createCell(5).setCellValue("LB-CL-A2-BLK");
-        sample.createCell(6).setCellValue("A2");
-        sample.createCell(7).setCellValue("negro");
-        sample.createCell(8).setCellValue(450);
-        sample.createCell(9).setCellValue("Pearl Weave");
-        sample.createCell(10).setCellValue("competencia");
-        sample.createCell(11).setCellValue(10);
-        sample.createCell(12).setCellValue(true);
+        sample.createCell(1).setCellValue("001");
+        sample.createCell(2).setCellValue("kimono");
+        sample.createCell(3).setCellValue("Pearl weave 450 GSM");
+        sample.createCell(4).setCellValue(120000);
+        sample.createCell(5).setCellValue("https://...");
+        sample.createCell(6).setCellValue("LB-CL-A2-BLK");
+        sample.createCell(7).setCellValue("A2");
+        sample.createCell(8).setCellValue("negro");
+        sample.createCell(9).setCellValue(450);
+        sample.createCell(10).setCellValue("Pearl Weave");
+        sample.createCell(11).setCellValue("competencia");
+        sample.createCell(12).setCellValue(10);
+        sample.createCell(13).setCellValue(true);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         workbook.write(out);

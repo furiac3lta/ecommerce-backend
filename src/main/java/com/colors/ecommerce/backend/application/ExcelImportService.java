@@ -19,8 +19,10 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Service
 public class ExcelImportService {
@@ -46,6 +48,7 @@ public class ExcelImportService {
         try (InputStream inputStream = file.getInputStream();
              XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
             Sheet sheet = workbook.getSheetAt(0);
+            Map<String, Integer> columnMap = buildColumnMap(sheet.getRow(0));
             int rowIndex = 0;
             for (Row row : sheet) {
                 rowIndex++;
@@ -56,19 +59,20 @@ public class ExcelImportService {
                     continue;
                 }
                 try {
-                    String productName = getString(row, 0);
-                    String categoryName = getString(row, 1);
-                    String description = getString(row, 2);
-                    BigDecimal basePrice = getBigDecimal(row, 3);
-                    String imagesRaw = getString(row, 4);
-                    String sku = getString(row, 5);
-                    String size = getString(row, 6);
-                    String color = getString(row, 7);
-                    BigDecimal gsm = getBigDecimal(row, 8);
-                    String material = getString(row, 9);
-                    String usage = getString(row, 10);
-                    Integer stock = getInteger(row, 11);
-                    Boolean active = getBoolean(row, 12);
+                    String productName = getString(row, resolveIndex(columnMap, "productname", 0));
+                    String productCode = getString(row, resolveIndex(columnMap, "code", -1));
+                    String categoryName = getString(row, resolveIndex(columnMap, "category", 1));
+                    String description = getString(row, resolveIndex(columnMap, "description", 2));
+                    BigDecimal basePrice = getBigDecimal(row, resolveIndex(columnMap, "baseprice", 3));
+                    String imagesRaw = getString(row, resolveIndex(columnMap, "images", 4));
+                    String sku = getString(row, resolveIndex(columnMap, "sku", 5));
+                    String size = getString(row, resolveIndex(columnMap, "size", 6));
+                    String color = getString(row, resolveIndex(columnMap, "color", 7));
+                    BigDecimal gsm = getBigDecimal(row, resolveIndex(columnMap, "gsm", 8));
+                    String material = getString(row, resolveIndex(columnMap, "material", 9));
+                    String usage = getString(row, resolveIndex(columnMap, "use", 10));
+                    Integer stock = getInteger(row, resolveIndex(columnMap, "stock", 11));
+                    Boolean active = getBoolean(row, resolveIndex(columnMap, "active", 12));
 
                     if (sku == null || sku.isBlank()) {
                         result.getErrors().add(new ImportError(rowIndex, "SKU obligatorio"));
@@ -97,7 +101,7 @@ public class ExcelImportService {
                         continue;
                     }
 
-                    ProductEntity product = findOrCreateProduct(productName, description, basePrice, imagesRaw, categoryName);
+                    ProductEntity product = findOrCreateProduct(productName, productCode, description, basePrice, imagesRaw, categoryName);
 
                     ProductVariantEntity variant = new ProductVariantEntity();
                     variant.setProductEntity(product);
@@ -122,7 +126,7 @@ public class ExcelImportService {
         return result;
     }
 
-    private ProductEntity findOrCreateProduct(String name, String description, BigDecimal basePrice, String imagesRaw, String categoryName) {
+    private ProductEntity findOrCreateProduct(String name, String code, String description, BigDecimal basePrice, String imagesRaw, String categoryName) {
         String brand = "LION'S BRAND";
         ProductEntity product = productCrudRepository.findByNameIgnoreCaseAndBrand(name, brand)
                 .orElseGet(() -> productCrudRepository.findByNameIgnoreCase(name).orElse(null));
@@ -131,6 +135,12 @@ public class ExcelImportService {
             product = new ProductEntity();
             product.setName(name);
             product.setBrand(brand);
+        }
+
+        if (code != null && !code.isBlank()) {
+            product.setCode(code);
+        } else if (product.getCode() == null || product.getCode().isBlank()) {
+            product.setCode("001");
         }
 
         if (product.getPriceOverride() == null) {
@@ -184,13 +194,32 @@ public class ExcelImportService {
     }
 
     private boolean isRowEmpty(Row row) {
-        for (int i = 0; i <= 12; i++) {
+        for (int i = 0; i <= 13; i++) {
             Cell cell = row.getCell(i);
             if (cell != null && cell.getCellType() != org.apache.poi.ss.usermodel.CellType.BLANK) {
                 return false;
             }
         }
         return true;
+    }
+
+    private Map<String, Integer> buildColumnMap(Row headerRow) {
+        Map<String, Integer> columnMap = new HashMap<>();
+        if (headerRow == null) {
+            return columnMap;
+        }
+        for (Cell cell : headerRow) {
+            String value = getString(headerRow, cell.getColumnIndex());
+            if (value == null || value.isBlank()) {
+                continue;
+            }
+            columnMap.put(value.trim().toLowerCase(Locale.ROOT), cell.getColumnIndex());
+        }
+        return columnMap;
+    }
+
+    private int resolveIndex(Map<String, Integer> columnMap, String key, int fallback) {
+        return columnMap.getOrDefault(key, fallback);
     }
 
     private String getString(Row row, int index) {

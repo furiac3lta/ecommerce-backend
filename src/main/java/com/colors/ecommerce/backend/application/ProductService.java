@@ -45,6 +45,7 @@ public class ProductService {
         if (product.getSlug() == null || product.getSlug().isBlank()) {
             product.setSlug(toSlug(product.getName()));
         }
+        product.setUrlImage(normalizeOptionalText(product.getUrlImage()));
 
         if (product.getCategoryId() == null) {
             throw new RuntimeException("Category is required to set price");
@@ -110,7 +111,10 @@ public class ProductService {
             if (product.getUrlImage() == null || product.getUrlImage().isBlank()) {
                 product.setUrlImage(finalImages.get(0));
             }
-            product.setPublicId(getPublicIdFromUrl(product.getUrlImage()));
+            String publicId = getPublicIdFromUrl(product.getUrlImage());
+            if (publicId != null) {
+                product.setPublicId(publicId);
+            }
             log.info("Imagenes guardadas para producto: {}", finalImages.size());
         } else {
             if (product.getImages() == null && existing != null && existing.getImages() != null) {
@@ -189,7 +193,26 @@ public class ProductService {
     }
 
     private String getPublicIdFromUrl(String url) {
+        if (url == null || url.isBlank()) {
+            return null;
+        }
+        int slashIndex = url.lastIndexOf('/') + 1;
+        int dotIndex = url.lastIndexOf('.');
+        if (dotIndex <= slashIndex) {
+            return null;
+        }
         return url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'));
+    }
+
+    private String normalizeOptionalText(String value) {
+        if (value == null) {
+            return null;
+        }
+        String normalized = value.trim();
+        if (normalized.isEmpty() || "null".equalsIgnoreCase(normalized) || "undefined".equalsIgnoreCase(normalized)) {
+            return null;
+        }
+        return normalized;
     }
 
     private String toSlug(String value) {

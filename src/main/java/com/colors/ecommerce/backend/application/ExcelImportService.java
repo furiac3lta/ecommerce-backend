@@ -90,8 +90,10 @@ public class ExcelImportService {
                         continue;
                     }
 
+                    ProductEntity product = findOrCreateProduct(productName, productCode, description, basePrice, imagesRaw, categoryName);
                     ProductVariantEntity existingVariant = productVariantCrudRepository.findBySku(sku);
                     if (existingVariant != null) {
+                        existingVariant.setProductEntity(product);
                         existingVariant.setSize(size);
                         existingVariant.setColor(color);
                         existingVariant.setGsm(gsm);
@@ -103,8 +105,6 @@ public class ExcelImportService {
                         result.setUpdated(result.getUpdated() + 1);
                         continue;
                     }
-
-                    ProductEntity product = findOrCreateProduct(productName, productCode, description, basePrice, imagesRaw, categoryName);
 
                     ProductVariantEntity variant = new ProductVariantEntity();
                     variant.setProductEntity(product);
@@ -155,6 +155,7 @@ public class ExcelImportService {
         if (product.getPriceOverride() == null) {
             product.setPriceOverride(false);
         }
+        product.setSellOnline(true);
 
         if (description != null && !description.isBlank()) {
             product.setDescription(description);
@@ -232,6 +233,9 @@ public class ExcelImportService {
     }
 
     private String getString(Row row, int index) {
+        if (index < 0) {
+            return null;
+        }
         Cell cell = row.getCell(index);
         if (cell == null) {
             return null;
@@ -241,6 +245,9 @@ public class ExcelImportService {
     }
 
     private BigDecimal getBigDecimal(Row row, int index) {
+        if (index < 0) {
+            return null;
+        }
         Cell cell = row.getCell(index);
         if (cell == null) {
             return null;
@@ -256,6 +263,9 @@ public class ExcelImportService {
     }
 
     private Integer getInteger(Row row, int index) {
+        if (index < 0) {
+            return null;
+        }
         Cell cell = row.getCell(index);
         if (cell == null) {
             return null;
@@ -271,6 +281,9 @@ public class ExcelImportService {
     }
 
     private Boolean getBoolean(Row row, int index) {
+        if (index < 0) {
+            return null;
+        }
         Cell cell = row.getCell(index);
         if (cell == null) {
             return null;

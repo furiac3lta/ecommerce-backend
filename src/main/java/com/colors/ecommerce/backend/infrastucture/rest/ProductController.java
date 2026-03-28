@@ -30,6 +30,7 @@ public class ProductController {
                                         @RequestParam("description") String description,
                                         @RequestParam("price") BigDecimal price,
                                         @RequestParam(value = "priceOverride", required = false) Boolean priceOverride,
+                                        @RequestParam(value = "active", required = false) Boolean active,
                                         @RequestParam(value = "sellOnline", required = false) Boolean sellOnline,
                                         @RequestParam(value = "deliveryType", required = false) com.colors.ecommerce.backend.domain.model.DeliveryType deliveryType,
                                         @RequestParam(value = "estimatedDeliveryDays", required = false) Integer estimatedDeliveryDays,
@@ -48,6 +49,7 @@ public class ProductController {
         product.setDescription(description);
         product.setPrice(price);
         product.setPriceOverride(priceOverride != null ? priceOverride : false);
+        product.setActive(active != null ? active : true);
         product.setSellOnline(sellOnline != null ? sellOnline : true);
         product.setDeliveryType(deliveryType);
         product.setEstimatedDeliveryDays(estimatedDeliveryDays);

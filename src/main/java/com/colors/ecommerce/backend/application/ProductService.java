@@ -61,8 +61,10 @@ public class ProductService {
         }
 
         Product existing = null;
-        if (product.getId() != null) {
+        if (product.getId() != null && product.getId() > 0) {
             existing = iProductRepository.findById(product.getId());
+        } else {
+            product.setId(null);
         }
 
         List<String> uploadedImages = new ArrayList<>();

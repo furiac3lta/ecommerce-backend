@@ -17,13 +17,16 @@ public class ProductService {
     private final IProductRepository iProductRepository;
     private final CategoryService categoryService;
     private final CloudinaryUploadFile cloudinaryUploadFile;
+    private final ProductCodeService productCodeService;
 
     public ProductService(IProductRepository iProductRepository,
                           CloudinaryUploadFile cloudinaryUploadFile,
-                          CategoryService categoryService) {
+                          CategoryService categoryService,
+                          ProductCodeService productCodeService) {
         this.iProductRepository = iProductRepository;
         this.cloudinaryUploadFile = cloudinaryUploadFile;
         this.categoryService = categoryService;
+        this.productCodeService = productCodeService;
     }
 
     public Product save(Product product, List<MultipartFile> images, MultipartFile multipartFile) throws IOException {
@@ -65,6 +68,16 @@ public class ProductService {
             existing = iProductRepository.findById(product.getId());
         } else {
             product.setId(null);
+        }
+
+        String normalizedCode = productCodeService.normalize(product.getCode());
+        if (normalizedCode != null) {
+            product.setCode(normalizedCode);
+        } else if (existing != null) {
+            String existingCode = productCodeService.normalize(existing.getCode());
+            product.setCode(existingCode != null ? existingCode : productCodeService.nextCode());
+        } else {
+            product.setCode(productCodeService.nextCode());
         }
 
         List<String> uploadedImages = new ArrayList<>();

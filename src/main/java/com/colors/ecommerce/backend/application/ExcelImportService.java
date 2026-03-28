@@ -29,13 +29,16 @@ public class ExcelImportService {
     private final IProductCrudRepository productCrudRepository;
     private final IProductVariantCrudRepository productVariantCrudRepository;
     private final ICategoryCrudRepository categoryCrudRepository;
+    private final ProductCodeService productCodeService;
 
     public ExcelImportService(IProductCrudRepository productCrudRepository,
                               IProductVariantCrudRepository productVariantCrudRepository,
-                              ICategoryCrudRepository categoryCrudRepository) {
+                              ICategoryCrudRepository categoryCrudRepository,
+                              ProductCodeService productCodeService) {
         this.productCrudRepository = productCrudRepository;
         this.productVariantCrudRepository = productVariantCrudRepository;
         this.categoryCrudRepository = categoryCrudRepository;
+        this.productCodeService = productCodeService;
     }
 
     public ExcelImportResult importFile(MultipartFile file) {
@@ -137,10 +140,16 @@ public class ExcelImportService {
             product.setBrand(brand);
         }
 
-        if (code != null && !code.isBlank()) {
-            product.setCode(code);
-        } else if (product.getCode() == null || product.getCode().isBlank()) {
-            product.setCode("001");
+        String normalizedCode = productCodeService.normalize(code);
+        if (normalizedCode != null) {
+            product.setCode(normalizedCode);
+        } else {
+            String existingCode = productCodeService.normalize(product.getCode());
+            if (existingCode != null) {
+                product.setCode(existingCode);
+            } else {
+                product.setCode(productCodeService.nextCode());
+            }
         }
 
         if (product.getPriceOverride() == null) {

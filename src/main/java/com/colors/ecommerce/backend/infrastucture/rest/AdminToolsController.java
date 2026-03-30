@@ -28,9 +28,20 @@ public class AdminToolsController {
         return new ResponseEntity<>(heroCarouselSlideService.replaceAll(slides), HttpStatus.OK);
     }
 
+    @PostMapping("/hero-slides/{carouselKey}")
+    public ResponseEntity<List<HeroCarouselSlideDto>> saveHeroSlidesByKey(@PathVariable("carouselKey") String carouselKey,
+                                                                          @RequestBody List<HeroCarouselSlideDto> slides) {
+        return new ResponseEntity<>(heroCarouselSlideService.replaceAll(carouselKey, slides), HttpStatus.OK);
+    }
+
     @PostMapping("/hero-slides/reset")
     public ResponseEntity<List<HeroCarouselSlideDto>> resetHeroSlides() {
         return new ResponseEntity<>(heroCarouselSlideService.reset(), HttpStatus.OK);
+    }
+
+    @PostMapping("/hero-slides/{carouselKey}/reset")
+    public ResponseEntity<List<HeroCarouselSlideDto>> resetHeroSlidesByKey(@PathVariable("carouselKey") String carouselKey) {
+        return new ResponseEntity<>(heroCarouselSlideService.reset(carouselKey), HttpStatus.OK);
     }
 
     @PostMapping("/hero-slides/image")

@@ -11,6 +11,9 @@ import java.util.List;
 
 @Service
 public class HeroCarouselSlideService {
+    public static final String HOME_HERO_KEY = "home-hero";
+    public static final String HOME_EDITORIAL_KEY = "home-editorial";
+
     private final IHeroCarouselSlideCrudRepository heroCarouselSlideCrudRepository;
 
     public HeroCarouselSlideService(IHeroCarouselSlideCrudRepository heroCarouselSlideCrudRepository) {
@@ -18,15 +21,25 @@ public class HeroCarouselSlideService {
     }
 
     public List<HeroCarouselSlideDto> findAll() {
-        List<HeroCarouselSlideEntity> entities = heroCarouselSlideCrudRepository.findAllByOrderByDisplayOrderAsc();
+        return findAllByKey(HOME_HERO_KEY);
+    }
+
+    public List<HeroCarouselSlideDto> findAllByKey(String carouselKey) {
+        List<HeroCarouselSlideEntity> entities = loadEntitiesByKey(carouselKey);
         if (entities.isEmpty()) {
-            return defaultSlides();
+            return defaultSlides(normalizeKey(carouselKey));
         }
         return entities.stream().map(this::toDto).toList();
     }
 
     @Transactional
     public List<HeroCarouselSlideDto> replaceAll(List<HeroCarouselSlideDto> slides) {
+        return replaceAll(HOME_HERO_KEY, slides);
+    }
+
+    @Transactional
+    public List<HeroCarouselSlideDto> replaceAll(String carouselKey, List<HeroCarouselSlideDto> slides) {
+        String normalizedKey = normalizeKey(carouselKey);
         if (slides == null || slides.isEmpty()) {
             throw new RuntimeException("At least one hero slide is required");
         }
@@ -39,6 +52,7 @@ public class HeroCarouselSlideService {
             }
             HeroCarouselSlideEntity entity = new HeroCarouselSlideEntity();
             entity.setDisplayOrder(i);
+            entity.setCarouselKey(normalizedKey);
             entity.setEyebrow(normalize(slide.eyebrow()));
             entity.setTitle(slide.title().trim());
             entity.setSubtitle(normalize(slide.subtitle()));
@@ -49,13 +63,21 @@ public class HeroCarouselSlideService {
             entities.add(entity);
         }
 
-        heroCarouselSlideCrudRepository.deleteAll();
+        List<HeroCarouselSlideEntity> existing = loadEntitiesByKey(normalizedKey);
+        if (!existing.isEmpty()) {
+            heroCarouselSlideCrudRepository.deleteAll(existing);
+        }
         heroCarouselSlideCrudRepository.saveAll(entities);
-        return findAll();
+        return findAllByKey(normalizedKey);
     }
 
     public List<HeroCarouselSlideDto> reset() {
-        return replaceAll(defaultSlides());
+        return reset(HOME_HERO_KEY);
+    }
+
+    public List<HeroCarouselSlideDto> reset(String carouselKey) {
+        String normalizedKey = normalizeKey(carouselKey);
+        return replaceAll(normalizedKey, defaultSlides(normalizedKey));
     }
 
     private HeroCarouselSlideDto toDto(HeroCarouselSlideEntity entity) {
@@ -78,7 +100,35 @@ public class HeroCarouselSlideService {
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
     }
-    private List<HeroCarouselSlideDto> defaultSlides() {
+
+    private List<HeroCarouselSlideEntity> loadEntitiesByKey(String carouselKey) {
+        String normalizedKey = normalizeKey(carouselKey);
+        List<HeroCarouselSlideEntity> entities = heroCarouselSlideCrudRepository.findAllByCarouselKeyOrderByDisplayOrderAsc(normalizedKey);
+        if (entities.isEmpty() && HOME_HERO_KEY.equals(normalizedKey)) {
+            return heroCarouselSlideCrudRepository.findAllByCarouselKeyIsNullOrderByDisplayOrderAsc();
+        }
+        return entities;
+    }
+
+    private String normalizeKey(String carouselKey) {
+        if (carouselKey == null || carouselKey.isBlank()) {
+            return HOME_HERO_KEY;
+        }
+        return carouselKey.trim().toLowerCase();
+    }
+
+    private List<HeroCarouselSlideDto> defaultSlides(String carouselKey) {
+        if (HOME_EDITORIAL_KEY.equals(carouselKey)) {
+            return List.of(
+                    new HeroCarouselSlideDto(null, "Lions Brand BJJ", "Diseno fuerte. Navegacion limpia. Compra directa.",
+                            "Un segundo carrusel para reforzar la marca, sostener el tono editorial y empujar al catalogo desde la home.",
+                            "Ver tienda", "/product", "assets/bjj/kimono2.jpg", "left"),
+                    new HeroCarouselSlideDto(null, "Fightwear editorial", "Colecciones claras. Lectura rapida. Producto al frente.",
+                            "Cada slide puede rotar mensajes, imagenes y CTA sin tocar codigo desde el admin.",
+                            "Explorar", "/product", "assets/bjj/rashguard1.png", "left")
+            );
+        }
+
         return List.of(
                 new HeroCarouselSlideDto(null, "Lions Brand BJJ", "Equipate para dominar el tatami",
                         "Drops visuales, siluetas limpias y una tienda pensada para entrar, mirar y comprar rapido.",

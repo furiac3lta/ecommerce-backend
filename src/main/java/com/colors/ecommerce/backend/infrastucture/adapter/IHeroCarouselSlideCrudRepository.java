@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IHeroCarouselSlideCrudRepository extends CrudRepository<HeroCarouselSlideEntity, Integer> {
     List<HeroCarouselSlideEntity> findAllByOrderByDisplayOrderAsc();
+    List<HeroCarouselSlideEntity> findAllByCarouselKeyOrderByDisplayOrderAsc(String carouselKey);
+    List<HeroCarouselSlideEntity> findAllByCarouselKeyIsNullOrderByDisplayOrderAsc();
 }

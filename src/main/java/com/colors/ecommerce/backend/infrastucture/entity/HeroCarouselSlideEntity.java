@@ -18,6 +18,7 @@ public class HeroCarouselSlideEntity {
     private Integer id;
 
     private Integer displayOrder;
+    private String carouselKey;
     private String eyebrow;
     private String title;
     private String subtitle;

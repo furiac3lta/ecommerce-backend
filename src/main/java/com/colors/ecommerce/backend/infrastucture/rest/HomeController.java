@@ -42,4 +42,9 @@ public class HomeController {
     public ResponseEntity<List<HeroCarouselSlideDto>> getHeroSlides() {
         return new ResponseEntity<>(heroCarouselSlideService.findAll(), HttpStatus.OK);
     }
+
+    @GetMapping("/hero-slides/{carouselKey}")
+    public ResponseEntity<List<HeroCarouselSlideDto>> getHeroSlidesByKey(@PathVariable("carouselKey") String carouselKey) {
+        return new ResponseEntity<>(heroCarouselSlideService.findAllByKey(carouselKey), HttpStatus.OK);
+    }
 }
